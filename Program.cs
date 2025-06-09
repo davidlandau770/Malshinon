@@ -10,7 +10,14 @@ namespace Malshinon
     {
         static void Main(string[] args)
         {
+            DAL dAL = new DAL();
+            dAL.PrintPeople();
 
+            People people = new People("david landau");
+            People people2 = new People("avishay landau");
+            People people3 = new People("landau");
+
+            dAL.PersonIdentificationFlow("david landau");
         }
     }
 }

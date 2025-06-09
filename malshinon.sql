@@ -4,12 +4,13 @@ CREATE TABLE IF NOT EXISTS people
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
+    full_name VARCHAR(50) NOT NULL,
     secret_code VARCHAR(30) UNIQUE,
     type_role ENUM('reporter','target','reporter and target','potential_agent'),
     num_reports INT DEFAULT 0,
     num_mentions INT DEFAULT 0
 );
--- INSERT INTO people (id, first_name, last_name, secret_code, type_role, num_reports, num_mentions) VALUES (0,'david','landau',4678,'reporter',0,0);
+-- INSERT INTO people (id, first_name, last_name, full_name, secret_code, type_role, num_reports, num_mentions) VALUES (0,'david','landau','david landu',123456,'reporter',0,0);
 
 CREATE TABLE IF NOT EXISTS Intel_Reports
 (
