@@ -9,10 +9,10 @@ namespace Malshinon
     internal class People
     {
         public int Id;
-        public string First_name;
-        public string Last_name;
-        public string Full_name;
-        public string Secret_code;
+        public string First_name = "";
+        public string Last_name = "";
+        public string Full_name = "";
+        public string Secret_code = "";
         public string Type_role = "reporter";
         public int Num_reports;
         public int Num_mentions;
@@ -22,22 +22,50 @@ namespace Malshinon
             string[] names = full_name.Split();
             if (names.Length < 2)
             {
-                Console.WriteLine("Enter name invalid!");
+                Console.WriteLine("Enter invalid name!");
                 return;
             }
-            Last_name = string.Join(" ", names.Skip(1).ToArray());
+
+            First_name = FirstNameAndLast(full_name)[0];
+            Last_name = FirstNameAndLast(full_name)[1];
+            Full_name = First_name + " " + Last_name;
+            Secret_code = CreateSecretCode().ToString();
         }
 
-        public People(int id, string first_name, string last_name, string secret_code, string type_role, int num_reports, int num_mentions)
+        public People(int id, string first_name, string last_name)
         {
             Id = id;
             First_name = first_name;
             Last_name = last_name;
             Full_name = first_name + " " + last_name;
-            Secret_code = secret_code;
-            Type_role = type_role;
-            Num_reports = num_reports;
-            Num_mentions = num_mentions;
+            Secret_code = CreateSecretCode().ToString();
+        }
+
+        DAL dAL = new DAL();
+
+        public int CreateSecretCode()
+        {
+            Random random = new Random();
+            int numRandom = 0;
+            while (numRandom == 0)
+            {
+                int rand = random.Next(10000000, 100000000);
+                bool isFound = dAL.GetSecretCodeIfFound($"{rand}");
+                if (!isFound)
+                {
+                    numRandom = rand;
+                }
+            }
+            return numRandom;
+        }
+
+        static public string[] FirstNameAndLast(string fullName)
+        {
+            string[] names = fullName.Split();
+            string first_name = string.Join(" ", names.Take(names.Length - 1));
+            string last_name = names[names.Length - 1];
+            string[] splitNames = { first_name, last_name };
+            return splitNames;
         }
 
         public override string ToString()
