@@ -87,7 +87,7 @@ namespace Malshinon
             int avgLengthTextReport = dal.GetAvgLengthTextReport(fullName);
             if (numReport == 20)
             {
-                Console.WriteLine("****\nAlert: potential threat alert\n****");
+                Console.WriteLine($"****\nALERT: {fullName} is potential threat alert\n****");
             }
             if (numReport > 0 && numMention > 0)
             {

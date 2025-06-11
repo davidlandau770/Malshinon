@@ -240,8 +240,8 @@ namespace Malshinon
                     cmd.Parameters.AddWithValue("@num_mentions", people.Num_mentions);
 
                     cmd.ExecuteNonQuery();
-                    Console.WriteLine($"{people.First_name} {people.Last_name} inserted successfully.");
-                    Console.WriteLine($"your secret code is: {GetSecretCode(people.Full_name)}");
+                    Console.WriteLine($"{people.Full_name} inserted successfully.");
+                    //Console.WriteLine($"your secret code is: {GetSecretCode(people.Full_name)}");
                 //}
                 //else
                 //{
