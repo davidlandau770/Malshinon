@@ -17,11 +17,28 @@ namespace Malshinon
             while (stop)
             {
                 //Console.Clear();
-                Console.WriteLine("Enter your full name");
-                string fullName = Console.ReadLine();
-                dal.PersonIdentificationFlow(fullName);
-
-                //Console.Clear();
+                Console.WriteLine("\nEnter your full name or secret code");
+                string checkIfSecret = Console.ReadLine();
+                bool ifSecret = int.TryParse(checkIfSecret, out int secretCode);
+                string fullName = "";
+                if (secretCode != 0 || checkIfSecret == "")
+                {
+                    bool ifFound = dal.GetSecretCodeIfFound(checkIfSecret);
+                    if (!ifFound)
+                    {
+                        Console.WriteLine("The secret code invalid");
+                        return;
+                    }
+                }
+                else
+                {
+                    fullName = checkIfSecret;
+                    dal.PersonIdentificationFlow(fullName);
+                }
+                Console.Clear();
+                Console.WriteLine("\n#########\nWelcome\n#########\n");
+                await Task.Delay(1000);
+                Console.Clear();
                 Console.WriteLine("Choose by number!\nmenu:\n1. Report\n2. get secret code");
                 bool isNumber = int.TryParse(Console.ReadLine(), out int chooseNumber);
                 if (!isNumber)
@@ -49,6 +66,11 @@ namespace Malshinon
                         break;
                 }
             }
+        }
+
+        public void CheckName()
+        {
+
         }
     }
 }
