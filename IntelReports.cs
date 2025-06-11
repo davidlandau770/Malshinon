@@ -13,15 +13,16 @@ namespace Malshinon
         public int Reporter_id;
         public int Target_id;
         public string Text;
-        public string Timestamp;
+        public DateTime Timestamp;
 
-        public IntelReports(int id, int reporter_id, int target_id, string text, string timestamp)
+        public IntelReports(int reporter_id, int target_id, string text)
         {
-            Id = id;
             Reporter_id = reporter_id;
             Target_id = target_id;
             Text = text;
-            Timestamp = timestamp;
+            //DateTime timestamp = DateTime.Now;
+            //Timestamp = timestamp;
+            Timestamp = DateTime.Now;
         }
 
         public override string ToString()

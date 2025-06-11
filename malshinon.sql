@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS people
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
-    full_name VARCHAR(50) NOT NULL,
+    -- full_name VARCHAR(50) NOT NULL,
     secret_code VARCHAR(30) UNIQUE,
     type_role ENUM('reporter','target','reporter and target','potential_agent'),
     num_reports INT DEFAULT 0,

@@ -62,10 +62,16 @@ namespace Malshinon
         static public string[] FirstNameAndLast(string fullName)
         {
             string[] names = fullName.Split();
-            string first_name = string.Join(" ", names.Take(names.Length - 1));
-            string last_name = names[names.Length - 1];
-            string[] splitNames = { first_name, last_name };
-            return splitNames;
+            if (names.Length != 2)
+            {
+                Console.WriteLine("Enter only 2 words");
+                //return null;
+            }
+            //string first_name = string.Join(" ", names.Take(names.Length - 1));
+            //string last_name = names[names.Length - 1];
+            //string[] splitNames = { first_name, last_name };
+            //Console.WriteLine($"fullName: {fullName}, people.First_name: {first_name}, people.Last_name: {last_name}, splitNames[0]: {splitNames[0]}, splitNams[1]: {splitNames[1]}, names[0]: {names[0]}, names[1]: {names[1]}");
+            return names;
         }
 
         public override string ToString()

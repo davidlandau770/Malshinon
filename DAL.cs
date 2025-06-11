@@ -14,6 +14,7 @@ namespace Malshinon
         private string connectionString = "server=localhost;user=root;password=;database=malshinon";
         private MySqlConnection _connection;
 
+        // MySql 
         public MySqlConnection OpenConnection()
         {
             if (_connection == null)
@@ -53,6 +54,8 @@ namespace Malshinon
                 Console.WriteLine($"General Error: {ex.Message}");
             }
         }
+
+        // People
 
         public List<People> GetPeople(string query = "SELECT * FROM people")
         {
@@ -224,19 +227,18 @@ namespace Malshinon
 
                 //if (!GetNameIfFound(people.Full_name))
                 //{
-                    string query = "INSERT INTO people (id, first_name, last_name, full_name, secret_code, type_role) VALUES (@id, @first_name, @last_name, @full_name, @secret_code, @type_role);";
+                string query = "INSERT INTO people (id, first_name, last_name, secret_code, type_role) VALUES (@id, @first_name, @last_name, @secret_code, @type_role);";
                     cmd = new MySqlCommand(query, _connection);
                     cmd.Parameters.AddWithValue("@id", people.Id);
                     cmd.Parameters.AddWithValue("@first_name", people.First_name);
                     cmd.Parameters.AddWithValue("@last_name", people.Last_name);
-                    cmd.Parameters.AddWithValue("@full_name", people.Full_name);
                     cmd.Parameters.AddWithValue("@secret_code", people.Secret_code);
                     cmd.Parameters.AddWithValue("@type_role", people.Type_role);
                     cmd.Parameters.AddWithValue("@num_reports", people.Num_reports);
                     cmd.Parameters.AddWithValue("@num_mentions", people.Num_mentions);
 
                     cmd.ExecuteNonQuery();
-                    Console.WriteLine($"{people.Full_name} inserted successfully.");
+                    Console.WriteLine($"{people.First_name} {people.Last_name} inserted successfully.");
                     Console.WriteLine($"your secret code is: {GetSecretCode(people.Full_name)}");
                 //}
                 //else
@@ -261,6 +263,7 @@ namespace Malshinon
                 if (!GetNameIfFound(peopleFullName))
                 {
                     People people = new People(peopleFullName);
+                    //Console.WriteLine($"people.First_name: {people.First_name}, people.Last_name: {people.Last_name}");
                     InsertPeople(people);
                 }
             }
@@ -270,9 +273,98 @@ namespace Malshinon
             }
         }
 
-        public void IntelSubmissionFlow(string peopleFullName)
-        {
+        //public void IntelSubmissionFlow(string peopleFullName)
+        //{
 
+        //}
+
+        public int GetIdByName(string fullName)
+        {
+            MySqlCommand cmd = null;
+            MySqlDataReader reader = null;
+
+            try
+            {
+                string firstName = People.FirstNameAndLast(fullName)[0];
+                string lastName = People.FirstNameAndLast(fullName)[1];
+
+                OpenConnection();
+                cmd = new MySqlCommand($"SELECT id FROM people WHERE first_name = '{firstName}' AND last_name = '{lastName}'", _connection);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int id = reader.GetInt32("id");
+                    return id;
+                }
+                Console.WriteLine("People read successful.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while geting people: {ex.Message}");
+            }
+            finally
+            {
+                if (reader != null && !reader.IsClosed)
+                {
+                    reader.Close();
+                }
+                CloseConnection();
+            }
+            return 0;
+        }
+
+        // Report
+
+        public void InsertReport(IntelReports report)
+        {
+            MySqlCommand cmd = null;
+            try
+            {
+                OpenConnection();
+
+                //if (!GetNameIfFound(people.Full_name))
+                //{
+                string query = "INSERT INTO intel_reports (id, reporter_id, target_id, text, timestamp) VALUES (@id, @reporter_id, @target_id, @text, @timestamp);";
+                cmd = new MySqlCommand(query, _connection);
+                cmd.Parameters.AddWithValue("@id", report.Id);
+                cmd.Parameters.AddWithValue("@reporter_id", report.Reporter_id);
+                cmd.Parameters.AddWithValue("@target_id", report.Target_id);
+                cmd.Parameters.AddWithValue("@text", report.Text);
+                cmd.Parameters.AddWithValue("@timestamp", report.Timestamp);
+
+                cmd.ExecuteNonQuery();
+                Console.WriteLine($"{report.Id} inserted successfully.");
+                Console.WriteLine($"{report.Reporter_id} reported about {report.Target_id} ({report.Timestamp})");
+                //}
+                //else
+                //{
+                //    Console.WriteLine("The name is already found.");
+                //}
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while inserting report: {ex.Message}");
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        public void ReportIdentificationFlow(int reporterId, int targetId, string text)
+        {
+            try
+            {
+                //if (!GetNameIfFound(people.Full_name))
+                //{
+                IntelReports report = new IntelReports(reporterId, targetId, text);
+                InsertReport(report);
+                //}
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while inserting report: {ex.Message}");
+            }
         }
     }
 }
