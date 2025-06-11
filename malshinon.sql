@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS people
     last_name VARCHAR(30) NOT NULL,
     -- full_name VARCHAR(50) NOT NULL,
     secret_code VARCHAR(30) UNIQUE,
-    type_role ENUM('reporter','target','reporter and target','potential_agent'),
+    type_role ENUM('reporter','target','both','potential_agent'),
     num_reports INT DEFAULT 0,
     num_mentions INT DEFAULT 0
 );

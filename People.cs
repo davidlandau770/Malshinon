@@ -13,11 +13,11 @@ namespace Malshinon
         public string Last_name = "";
         public string Full_name = "";
         public string Secret_code = "";
-        public string Type_role = "reporter";
+        public string Type_role = "";
         public int Num_reports;
         public int Num_mentions;
         
-        public People(string full_name)
+        public People(string full_name, string typeRole = "reporter")
         {
             string[] names = full_name.Split();
             if (names.Length < 2)
@@ -30,6 +30,7 @@ namespace Malshinon
             Last_name = FirstNameAndLast(full_name)[1];
             Full_name = First_name + " " + Last_name;
             Secret_code = CreateSecretCode().ToString();
+            Type_role = typeRole;
         }
 
         public People(int id, string first_name, string last_name)

@@ -12,7 +12,7 @@ namespace Malshinon
     internal class CreateReport
     {
         DAL dal = new DAL();
-        public async Task ReportPerson(string fullName)
+        public void ReportPerson(string fullName)
         {
             Console.WriteLine("Enter text to report:");
             string textReport = Console.ReadLine();
@@ -32,6 +32,12 @@ namespace Malshinon
                 dal.ReportIdentificationFlow(reporterId, targetId, textReport);
                 dal.AddNumReports(reporterId);
                 dal.AddNumMentions(targetId);
+                //string typeOfReporter = dal.CheckTypeOfPeople(reporterId);
+                //string typeOfTarget = dal.CheckTypeOfPeople(targetId);
+                string typeRoleReporter = CheckStatusTypeRole(fullName);
+                dal.ChangeTypeRole(reporterId, typeRoleReporter);
+                string typeRoleMention = CheckStatusTypeRole(name);
+                dal.ChangeTypeRole(targetId, typeRoleMention);
             }
 
             Console.WriteLine("The report was successfully received.");
@@ -72,6 +78,37 @@ namespace Malshinon
             }
 
             return namesFromReports;
+        }
+
+        public string CheckStatusTypeRole(string fullName)
+        {
+            int numReport = dal.GetNumReportByName(fullName);
+            int numMention = dal.GetNumMentionByName(fullName);
+            int avgLengthTextReport = dal.GetAvgLengthTextReport(fullName);
+            if (numReport == 20)
+            {
+                Console.WriteLine("****\nAlert: potential threat alert\n****");
+            }
+            if (numReport > 0 && numMention > 0)
+            {
+                return "both";
+            }
+            else if (numReport >= 10 && avgLengthTextReport >= 100)
+            {
+                return "potential_agent";
+            }
+            else if (numMention > 0)
+            {
+                return "target";
+            }
+            else if (numReport > 0)
+            {
+                return "reporter";
+            }
+            else
+            {
+                return "null";
+            }
         }
     }
 }

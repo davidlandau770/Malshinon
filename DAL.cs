@@ -258,6 +258,11 @@ namespace Malshinon
             }
         }
 
+        //public void IntelSubmissionFlow(string peopleFullName)
+        //{
+
+        //}
+
         public void PersonIdentificationFlow(string peopleFullName)
         {
             try
@@ -274,11 +279,6 @@ namespace Malshinon
                 Console.WriteLine($"Error while inserting people: {ex.Message}");
             }
         }
-
-        //public void IntelSubmissionFlow(string peopleFullName)
-        //{
-
-        //}
 
         public int GetIdByName(string fullName)
         {
@@ -384,8 +384,43 @@ namespace Malshinon
                 reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
-                    int numReport = reader.GetInt32("id");
+                    int numReport = reader.GetInt32("num_reports");
                     return numReport;
+                }
+                Console.WriteLine("People read successful.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while geting people: {ex.Message}");
+            }
+            finally
+            {
+                if (reader != null && !reader.IsClosed)
+                {
+                    reader.Close();
+                }
+                CloseConnection();
+            }
+            return 0;
+        }
+
+        public int GetNumMentionByName(string fullName)
+        {
+            MySqlCommand cmd = null;
+            MySqlDataReader reader = null;
+
+            try
+            {
+                string firstName = People.FirstNameAndLast(fullName)[0];
+                string lastName = People.FirstNameAndLast(fullName)[1];
+
+                OpenConnection();
+                cmd = new MySqlCommand($"SELECT num_mentions FROM people WHERE first_name = '{firstName}' AND last_name = '{lastName}'", _connection);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int numMentions = reader.GetInt32("num_mentions");
+                    return numMentions;
                 }
                 Console.WriteLine("People read successful.");
             }
@@ -410,17 +445,20 @@ namespace Malshinon
             try
             {
                 OpenConnection();
+                string query = "UPDATE people SET type_role = @newType WHERE id = @peopleId;";
+                cmd = new MySqlCommand(query, _connection);
+                cmd.Parameters.AddWithValue("@newType", newType);
+                cmd.Parameters.AddWithValue("@peopleId", peopleId);
 
-                cmd = new MySqlCommand($"UPDATE people SET type_role = '{newType}' WHERE id = {peopleId};", _connection);
                 int afected = cmd.ExecuteNonQuery();
                 if (afected > 0)
                 {
-                    Console.WriteLine("Table updated successfully.");
+                    Console.WriteLine($"{peopleId} changed status to {newType}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error while fetching agents: {ex.Message}");
+                Console.WriteLine($"Error while update typing: {ex.Message}");
             }
             finally
             {
@@ -480,6 +518,40 @@ namespace Malshinon
             {
                 CloseConnection();
             }
+        }
+
+        public int GetAvgLengthTextReport(string fullName)
+        {
+            MySqlCommand cmd = null;
+            MySqlDataReader reader = null;
+
+            try
+            {
+                int idPeople = GetIdByName(fullName);
+
+                OpenConnection();
+                cmd = new MySqlCommand($"SELECT AVG(LENGTH(text)) AS avg_length FROM `intel_reports` WHERE reporter_id = {idPeople} GROUP BY reporter_id HAVING COUNT(*) >= 10;", _connection);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int avgLength = reader.GetInt32("avg_length");
+                    return avgLength;
+                }
+                Console.WriteLine("People read successful.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while geting people: {ex.Message}");
+            }
+            finally
+            {
+                if (reader != null && !reader.IsClosed)
+                {
+                    reader.Close();
+                }
+                CloseConnection();
+            }
+            return 0;
         }
     }
 }

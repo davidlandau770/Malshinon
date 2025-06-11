@@ -16,7 +16,6 @@ namespace Malshinon
             DAL dal = new DAL();
             while (stop)
             {
-
                 //Console.Clear();
                 Console.WriteLine("Enter your full name");
                 string fullName = Console.ReadLine();
@@ -34,7 +33,7 @@ namespace Malshinon
                 switch (chooseNumber)
                 {
                     case 1:
-                        await report.ReportPerson(fullName);
+                        report.ReportPerson(fullName);
                         break;
                     case 2:
                         Console.WriteLine($"****\nSecret Code is: {dal.GetSecretCode(fullName)}\n****\n5 seconds to view");
