@@ -6,6 +6,8 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
+using static Mysqlx.Expect.Open.Types;
 
 namespace Malshinon
 {
@@ -300,7 +302,7 @@ namespace Malshinon
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error while geting people: {ex.Message}");
+                Console.WriteLine($"Error while geting people:{ex.GetType().Name} ---- {ex.Message}");
             }
             finally
             {
@@ -364,6 +366,119 @@ namespace Malshinon
             catch (Exception ex)
             {
                 Console.WriteLine($"Error while inserting report: {ex.Message}");
+            }
+        }
+
+        public int GetNumReportByName(string fullName)
+        {
+            MySqlCommand cmd = null;
+            MySqlDataReader reader = null;
+
+            try
+            {
+                string firstName = People.FirstNameAndLast(fullName)[0];
+                string lastName = People.FirstNameAndLast(fullName)[1];
+
+                OpenConnection();
+                cmd = new MySqlCommand($"SELECT num_reports FROM people WHERE first_name = '{firstName}' AND last_name = '{lastName}'", _connection);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int numReport = reader.GetInt32("id");
+                    return numReport;
+                }
+                Console.WriteLine("People read successful.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while geting people: {ex.Message}");
+            }
+            finally
+            {
+                if (reader != null && !reader.IsClosed)
+                {
+                    reader.Close();
+                }
+                CloseConnection();
+            }
+            return 0;
+        }
+
+        public void ChangeTypeRole(int peopleId, string newType)
+        {
+            MySqlCommand cmd = null;
+            try
+            {
+                OpenConnection();
+
+                cmd = new MySqlCommand($"UPDATE people SET type_role = '{newType}' WHERE id = {peopleId};", _connection);
+                int afected = cmd.ExecuteNonQuery();
+                if (afected > 0)
+                {
+                    Console.WriteLine("Table updated successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while fetching agents: {ex.Message}");
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        public void AddNumReports(int id)
+        {
+            MySqlCommand cmd = null;
+
+            try
+            {
+                OpenConnection();
+
+                string query = $"UPDATE people SET num_reports = num_reports + 1 WHERE id = @id;";
+                //string query = "INSERT INTO people (id, first_name, last_name, secret_code, type_role) VALUES (@id, @first_name, @last_name, @secret_code, @type_role);";
+                cmd = new MySqlCommand(query, _connection);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                int reader = cmd.ExecuteNonQuery();
+                if (reader > 0)
+                {
+                    Console.WriteLine("Table updated successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while updating people:{ex.GetType().Name} ----  {ex.Message}");
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        public void AddNumMentions(int id)
+        {
+            MySqlCommand cmd = null;
+            try
+            {
+                OpenConnection();
+
+                cmd = new MySqlCommand($"UPDATE people SET num_mentions = num_mentions + 1 WHERE id = @id;", _connection);
+                cmd.Parameters.AddWithValue("@id", id);
+                int reader = cmd.ExecuteNonQuery();
+                if (reader > 0)
+                {
+                    Console.WriteLine("Table updated successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while updating people: {ex.Message}");
+            }
+            finally
+            {
+                CloseConnection();
             }
         }
     }

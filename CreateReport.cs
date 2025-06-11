@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace Malshinon
 {
@@ -29,10 +30,11 @@ namespace Malshinon
                 dal.PersonIdentificationFlow(name);
                 int targetId = dal.GetIdByName(name);
                 dal.ReportIdentificationFlow(reporterId, targetId, textReport);
+                dal.AddNumReports(reporterId);
+                dal.AddNumMentions(targetId);
             }
 
             Console.WriteLine("The report was successfully received.");
-            await Task.Delay(20000);
         }
 
         public List<string> GetPersonListFromReport(string textReport)
@@ -53,10 +55,19 @@ namespace Malshinon
                 {
                     if (isName)
                     {
-                        full_name.TrimEnd();
-                        namesFromReports.Add(full_name);
+                        string[] countWords = full_name.Split(' ');
+                        if (countWords.Length > 1)
+                        {
+                            full_name.Trim();
+                            namesFromReports.Add(full_name);
+                        }
+                        full_name = "";
                     }
                     isName = false;
+                }
+                if (i == textArr.Length - 1 && full_name.Split().Length > 1)
+                {
+                    namesFromReports.Add(full_name);
                 }
             }
 
