@@ -15,6 +15,7 @@ namespace Malshinon
         PeopleDal peopleDal = new PeopleDal();
         ReportDal reportDal = new ReportDal();
         AlertDal alertDal = new AlertDal();
+
         public void CreateReportPerson(string fullName)
         {
             Console.WriteLine("Enter text to report:");
@@ -52,29 +53,34 @@ namespace Malshinon
             string full_name = "";
 
             bool isName = false;
-            string[] textArr = textReport.Split();
+            string[] textArr = textReport.Split(' ');
             for (int i = 0; i < textArr.Length; i++)
             {
                 if (Char.IsUpper(textArr[i][0]))
                 {
                     isName = true;
-                    full_name += textArr[i] + " ";
+                    full_name += $"{textArr[i]} ";
+                    //full_name.TrimStart();
                 }
                 else
                 {
                     if (isName)
                     {
+                        full_name.Trim();
                         string[] countWords = full_name.Split(' ');
                         if (countWords.Length > 1)
                         {
-                            full_name.Trim();
                             namesFromReports.Add(full_name);
                         }
                         full_name = "";
                     }
                     isName = false;
                 }
-                if (i == textArr.Length - 1 && full_name.Split().Length > 1)
+                string[] countWords2 = full_name.Split(' ');
+                //Console.WriteLine("countWords2.Length:" + countWords2.Length);
+                //full_name.Trim();
+                Console.WriteLine("full name2: " + full_name);
+                if (i == textArr.Length - 1 && countWords2.Length > 1)
                 {
                     namesFromReports.Add(full_name);
                 }

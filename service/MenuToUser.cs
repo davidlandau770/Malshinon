@@ -63,6 +63,7 @@ namespace Malshinon
                         await Task.Delay(1000);
                         Console.WriteLine("1 seconds to view");
                         await Task.Delay(1000);
+                        Console.Clear();
                         break;
                 }
             }
