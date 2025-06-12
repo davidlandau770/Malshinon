@@ -553,5 +553,38 @@ namespace Malshinon
             }
             return 0;
         }
+
+        public int DangerCheckInLast15Minuts(string fullName)
+        {
+            MySqlCommand cmd = null;
+            MySqlDataReader reader = null;
+
+            try
+            {
+                int idPeople = GetIdByName(fullName);       
+                OpenConnection();
+                cmd = new MySqlCommand($"SELECT *, COUNT(`target_id`) AS count_target_id FROM intel_reports GROUP BY `target_id` HAVING (count_target_id > 20 OR COUNT(`timestamp` >= NOW() - INTERVAL 15 MINUTE AND `timestamp` <= NOW()) > 3) AND target_id = {idPeople};", _connection);
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int countTargetId = reader.GetInt32("count_target_id");
+                    return countTargetId;
+                }
+                Console.WriteLine("The count read successful.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while geting people: {ex.Message}");
+            }
+            finally
+            {
+                if (reader != null && !reader.IsClosed)
+                {
+                    reader.Close();
+                }
+                CloseConnection();
+            }
+            return 0;
+        }
     }
 }

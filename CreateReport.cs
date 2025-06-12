@@ -85,9 +85,14 @@ namespace Malshinon
             int numReport = dal.GetNumReportByName(fullName);
             int numMention = dal.GetNumMentionByName(fullName);
             int avgLengthTextReport = dal.GetAvgLengthTextReport(fullName);
-            if (numReport == 20)
+            int countAlert = dal.DangerCheckInLast15Minuts(fullName);
+            if (numReport >= 20 && numReport % 10 == 0)
             {
                 Console.WriteLine($"****\nALERT: {fullName} is potential threat alert\n****");
+            }
+            if (countAlert > 3)
+            {
+                Console.WriteLine($"****\nALERT: {fullName} is a high-risk target.\n****");
             }
             if (numReport > 0 && numMention > 0)
             {
