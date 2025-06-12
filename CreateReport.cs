@@ -12,7 +12,7 @@ namespace Malshinon
     internal class CreateReport
     {
         DAL dal = new DAL();
-        public void ReportPerson(string fullName)
+        public void CreateReportPerson(string fullName)
         {
             Console.WriteLine("Enter text to report:");
             string textReport = Console.ReadLine();
@@ -32,12 +32,11 @@ namespace Malshinon
                 dal.ReportIdentificationFlow(reporterId, targetId, textReport);
                 dal.AddNumReports(reporterId);
                 dal.AddNumMentions(targetId);
-                //string typeOfReporter = dal.CheckTypeOfPeople(reporterId);
-                //string typeOfTarget = dal.CheckTypeOfPeople(targetId);
                 string typeRoleReporter = CheckStatusTypeRole(fullName);
                 dal.ChangeTypeRole(reporterId, typeRoleReporter);
                 string typeRoleMention = CheckStatusTypeRole(name);
                 dal.ChangeTypeRole(targetId, typeRoleMention);
+
             }
 
             Console.WriteLine("The report was successfully received.");

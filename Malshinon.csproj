@@ -95,13 +95,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alert.cs" />
+    <Compile Include="AlertDal.cs" />
     <Compile Include="DAL.cs" />
     <Compile Include="IntelReports.cs" />
     <Compile Include="MenuToUser.cs" />
     <Compile Include="People.cs" />
+    <Compile Include="PeopleDal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CreateReport.cs" />
+    <Compile Include="ReportDal.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 namespace Malshinon
 {
     internal class People
-    {
-        public int Id;
-        public string First_name = "";
-        public string Last_name = "";
-        public string Full_name = "";
-        public string Secret_code = "";
-        public string Type_role = "";
-        public int Num_reports;
-        public int Num_mentions;
-        
+    {        
+        public int Id { get; private set; }
+        public string First_name { get; private set; }
+        public string Last_name { get; private set; }
+        public string Full_name { get; private set; }
+        public string Secret_code { get; private set; }
+        public string Type_role { get; private set; }
+        public int Num_reports { get; private set; }
+        public int Num_mentions { get; private set; }
+
         public People(string full_name, string typeRole = "reporter")
         {
             string[] names = full_name.Split();

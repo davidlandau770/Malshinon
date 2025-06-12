@@ -28,9 +28,7 @@ CREATE TABLE IF NOT EXISTS alerts
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     target_id INT NOT NULL,
-    text VARCHAR(200),
-    timestamp DATETIME DEFAULT NOW(),
-    FOREIGN KEY (reporter_id) REFERENCES people(id),
+    created_at DATETIME DEFAULT NOW(),
+    reason VARCHAR(200),
     FOREIGN KEY (target_id) REFERENCES people(id)
-    id, target_id, created_at, reason
 );

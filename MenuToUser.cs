@@ -50,7 +50,7 @@ namespace Malshinon
                 switch (chooseNumber)
                 {
                     case 1:
-                        report.ReportPerson(fullName);
+                        report.CreateReportPerson(fullName);
                         break;
                     case 2:
                         Console.WriteLine($"****\nSecret Code is: {dal.GetSecretCode(fullName)}\n****\n5 seconds to view");
