@@ -12,6 +12,7 @@ namespace Malshinon
         private string connectionString = "server=localhost;user=root;password=;database=malshinon";
         private MySqlConnection _connection;
         DAL dal = new DAL();
+
         public void InsertAlert(Alert alert)
         {
 

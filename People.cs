@@ -43,6 +43,7 @@ namespace Malshinon
         }
 
         DAL dAL = new DAL();
+        PeopleDal peopleDal = new PeopleDal();
 
         public int CreateSecretCode()
         {
@@ -51,7 +52,7 @@ namespace Malshinon
             while (numRandom == 0)
             {
                 int rand = random.Next(10000000, 100000000);
-                bool isFound = dAL.GetSecretCodeIfFound($"{rand}");
+                bool isFound = peopleDal.GetSecretCodeIfFound($"{rand}");
                 if (!isFound)
                 {
                     numRandom = rand;

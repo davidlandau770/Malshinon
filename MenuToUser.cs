@@ -9,6 +9,7 @@ namespace Malshinon
 {
     internal class MenuToUser
     {
+        PeopleDal peopleDal = new PeopleDal();
         public async Task StartProgram()
         {
             bool stop = true;
@@ -23,7 +24,7 @@ namespace Malshinon
                 string fullName = "";
                 if (secretCode != 0 || checkIfSecret == "")
                 {
-                    bool ifFound = dal.GetSecretCodeIfFound(checkIfSecret);
+                    bool ifFound = peopleDal.GetSecretCodeIfFound(checkIfSecret);
                     if (!ifFound)
                     {
                         Console.WriteLine("The secret code invalid");
@@ -33,7 +34,7 @@ namespace Malshinon
                 else
                 {
                     fullName = checkIfSecret;
-                    dal.PersonIdentificationFlow(fullName);
+                    peopleDal.PersonIdentificationFlow(fullName);
                 }
                 Console.Clear();
                 Console.WriteLine("\n#########\nWelcome\n#########\n");
@@ -53,7 +54,7 @@ namespace Malshinon
                         report.CreateReportPerson(fullName);
                         break;
                     case 2:
-                        Console.WriteLine($"****\nSecret Code is: {dal.GetSecretCode(fullName)}\n****\n5 seconds to view");
+                        Console.WriteLine($"****\nSecret Code is: {peopleDal.GetSecretCode(fullName)}\n****\n5 seconds to view");
                         await Task.Delay(1000);
                         Console.WriteLine("4 seconds to view");
                         await Task.Delay(1000);
@@ -66,11 +67,6 @@ namespace Malshinon
                         break;
                 }
             }
-        }
-
-        public void CheckName()
-        {
-
         }
     }
 }

@@ -173,7 +173,7 @@ namespace Malshinon
         public void PrintPeople()
         {
             DAL dAL = new DAL();
-            List<People> peoples = dAL.GetPeople();
+            List<People> peoples = GetPeople();
             foreach (var people in peoples)
             {
                 Console.WriteLine(people.ToString());
@@ -217,11 +217,6 @@ namespace Malshinon
                 dal.CloseConnection();
             }
         }
-
-        //public void IntelSubmissionFlow(string peopleFullName)
-        //{
-
-        //}
 
         public void PersonIdentificationFlow(string peopleFullName)
         {
@@ -275,6 +270,5 @@ namespace Malshinon
             }
             return 0;
         }
-
     }
 }

@@ -12,6 +12,9 @@ namespace Malshinon
     internal class CreateReport
     {
         DAL dal = new DAL();
+        PeopleDal peopleDal = new PeopleDal();
+        ReportDal reportDal = new ReportDal();
+
         public void CreateReportPerson(string fullName)
         {
             Console.WriteLine("Enter text to report:");
@@ -24,18 +27,18 @@ namespace Malshinon
                 return;
             }
 
-            int reporterId = dal.GetIdByName(fullName);
+            int reporterId = peopleDal.GetIdByName(fullName);
             foreach (string name in names)
             {
-                dal.PersonIdentificationFlow(name);
-                int targetId = dal.GetIdByName(name);
-                dal.ReportIdentificationFlow(reporterId, targetId, textReport);
-                dal.AddNumReports(reporterId);
-                dal.AddNumMentions(targetId);
+                peopleDal.PersonIdentificationFlow(name);
+                int targetId = peopleDal.GetIdByName(name);
+                reportDal.ReportIdentificationFlow(reporterId, targetId, textReport);
+                reportDal.AddNumReports(reporterId);
+                reportDal.AddNumMentions(targetId);
                 string typeRoleReporter = CheckStatusTypeRole(fullName);
-                dal.ChangeTypeRole(reporterId, typeRoleReporter);
+                reportDal.ChangeTypeRole(reporterId, typeRoleReporter);
                 string typeRoleMention = CheckStatusTypeRole(name);
-                dal.ChangeTypeRole(targetId, typeRoleMention);
+                reportDal.ChangeTypeRole(targetId, typeRoleMention);
 
             }
 
@@ -81,10 +84,10 @@ namespace Malshinon
 
         public string CheckStatusTypeRole(string fullName)
         {
-            int numReport = dal.GetNumReportByName(fullName);
-            int numMention = dal.GetNumMentionByName(fullName);
-            int avgLengthTextReport = dal.GetAvgLengthTextReport(fullName);
-            int countAlert = dal.DangerCheckInLast15Minuts(fullName);
+            int numReport = reportDal.GetNumReportByName(fullName);
+            int numMention = reportDal.GetNumMentionByName(fullName);
+            int avgLengthTextReport = reportDal.GetAvgLengthTextReport(fullName);
+            int countAlert = reportDal.DangerCheckInLast15Minuts(fullName);
             if (numReport >= 20 && numReport % 10 == 0)
             {
                 Console.WriteLine($"****\nALERT: {fullName} is potential threat alert\n****");

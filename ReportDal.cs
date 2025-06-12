@@ -13,6 +13,7 @@ namespace Malshinon
         private string connectionString = "server=localhost;user=root;password=;database=malshinon";
         private MySqlConnection _connection;
         DAL dal = new DAL();
+        PeopleDal PeopleDal = new PeopleDal();
 
         public void InsertReport(IntelReports report)
         {
@@ -221,7 +222,7 @@ namespace Malshinon
 
             try
             {
-                int idPeople = GetIdByName(fullName);
+                int idPeople = PeopleDal.GetIdByName(fullName);
 
                 dal.OpenConnection();
                 cmd = new MySqlCommand($"SELECT AVG(LENGTH(text)) AS avg_length FROM `intel_reports` WHERE reporter_id = @idPeople GROUP BY reporter_id HAVING COUNT(*) >= 10;", _connection);
@@ -256,7 +257,7 @@ namespace Malshinon
 
             try
             {
-                int idPeople = GetIdByName(fullName);
+                int idPeople = PeopleDal.GetIdByName(fullName);
                 dal.OpenConnection();
                 cmd = new MySqlCommand($"SELECT *, COUNT(`target_id`) AS count_target_id FROM intel_reports GROUP BY `target_id` HAVING (count_target_id > 20 OR COUNT(`timestamp` >= NOW() - INTERVAL 15 MINUTE AND `timestamp` <= NOW()) > 3) AND target_id = @idPeople;", _connection);
                 cmd.Parameters.AddWithValue("idPeople", idPeople);
@@ -282,6 +283,5 @@ namespace Malshinon
             }
             return 0;
         }
-
     }
 }
