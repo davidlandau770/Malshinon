@@ -36,10 +36,10 @@ namespace Malshinon
                     fullName = checkIfSecret;
                     peopleDal.PersonIdentificationFlow(fullName);
                 }
-                Console.Clear();
+                //Console.Clear();
                 Console.WriteLine("\n#########\nWelcome\n#########\n");
                 await Task.Delay(1000);
-                Console.Clear();
+                //Console.Clear();
                 Console.WriteLine("Choose by number!\nmenu:\n1. Report\n2. get secret code");
                 bool isNumber = int.TryParse(Console.ReadLine(), out int chooseNumber);
                 if (!isNumber)

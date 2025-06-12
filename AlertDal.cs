@@ -19,7 +19,7 @@ namespace Malshinon
             MySqlCommand cmd = null;
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
 
                 string query = "INSERT INTO alerts (id, target_id, created_at, reason) VALUES (@id, @target_id, @created_at, @reason);";
                 cmd = new MySqlCommand(query, _connection);

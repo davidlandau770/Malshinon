@@ -10,7 +10,7 @@ namespace Malshinon
 {
     internal class PeopleDal
     {
-        private string connectionString = "server=localhost;user=root;password=;database=malshinon";
+        //private string connectionString = "server=localhost;user=root;password=;database=malshinon";
         private MySqlConnection _connection;
         DAL dal = new DAL();
 
@@ -22,7 +22,7 @@ namespace Malshinon
 
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
                 cmd = new MySqlCommand(query, _connection);
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -64,7 +64,7 @@ namespace Malshinon
             string lastName = People.FirstNameAndLast(newFullName)[1];
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
                 cmd = new MySqlCommand($"SELECT first_name, last_name FROM people WHERE first_name = @firstName AND last_name = @lastName", _connection);
                 cmd.Parameters.AddWithValue("firstName", firstName);
                 cmd.Parameters.AddWithValue("lastName", lastName);
@@ -102,7 +102,7 @@ namespace Malshinon
 
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
                 cmd = new MySqlCommand($"SELECT secret_code FROM people WHERE secret_code = @newSecretCode", _connection);
                 cmd.Parameters.AddWithValue("newSecretCode", newSecretCode);
                 reader = cmd.ExecuteReader();
@@ -140,7 +140,7 @@ namespace Malshinon
 
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
                 cmd = new MySqlCommand($"SELECT secret_code FROM people WHERE first_name = @firstName AND last_name = @lastName", _connection);
                 cmd.Parameters.AddWithValue("firstName", firstName);
                 cmd.Parameters.AddWithValue("lastName", lastName);
@@ -185,7 +185,7 @@ namespace Malshinon
             MySqlCommand cmd = null;
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
 
                 //if (!GetNameIfFound(people.Full_name))
                 //{
@@ -244,7 +244,7 @@ namespace Malshinon
                 string firstName = People.FirstNameAndLast(fullName)[0];
                 string lastName = People.FirstNameAndLast(fullName)[1];
 
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
                 cmd = new MySqlCommand($"SELECT id FROM people WHERE first_name = @firstName AND last_name = @lastName", _connection);
                 cmd.Parameters.AddWithValue("firstName", firstName);
                 cmd.Parameters.AddWithValue("lastName", lastName);

@@ -10,7 +10,7 @@ namespace Malshinon
 {
     internal class ReportDal
     {
-        private string connectionString = "server=localhost;user=root;password=;database=malshinon";
+        //private string connectionString = "server=localhost;user=root;password=;database=malshinon";
         private MySqlConnection _connection;
         DAL dal = new DAL();
         PeopleDal PeopleDal = new PeopleDal();
@@ -20,7 +20,7 @@ namespace Malshinon
             MySqlCommand cmd = null;
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
 
                 string query = "INSERT INTO intel_reports (id, reporter_id, target_id, text, timestamp) VALUES (@id, @reporter_id, @target_id, @text, @timestamp);";
                 cmd = new MySqlCommand(query, _connection);
@@ -48,11 +48,8 @@ namespace Malshinon
         {
             try
             {
-                //if (!GetNameIfFound(people.Full_name))
-                //{
                 IntelReports report = new IntelReports(reporterId, targetId, text);
                 InsertReport(report);
-                //}
             }
             catch (Exception ex)
             {
@@ -70,7 +67,8 @@ namespace Malshinon
                 string firstName = People.FirstNameAndLast(fullName)[0];
                 string lastName = People.FirstNameAndLast(fullName)[1];
 
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
+
                 cmd = new MySqlCommand($"SELECT num_reports FROM people WHERE first_name = @firstName AND last_name = @lastName", _connection);
                 cmd.Parameters.AddWithValue("firstName", firstName);
                 cmd.Parameters.AddWithValue("lastName", lastName);
@@ -107,7 +105,8 @@ namespace Malshinon
                 string firstName = People.FirstNameAndLast(fullName)[0];
                 string lastName = People.FirstNameAndLast(fullName)[1];
 
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
+
                 cmd = new MySqlCommand($"SELECT num_mentions FROM people WHERE first_name = @firstName AND last_name = @lastName", _connection);
                 cmd.Parameters.AddWithValue("firstName", firstName);
                 cmd.Parameters.AddWithValue("lastName", lastName);
@@ -139,7 +138,8 @@ namespace Malshinon
             MySqlCommand cmd = null;
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
+
                 string query = "UPDATE people SET type_role = @newType WHERE id = @peopleId;";
                 cmd = new MySqlCommand(query, _connection);
                 cmd.Parameters.AddWithValue("@newType", newType);
@@ -167,7 +167,7 @@ namespace Malshinon
 
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
 
                 string query = $"UPDATE people SET num_reports = num_reports + 1 WHERE id = @id;";
                 //string query = "INSERT INTO people (id, first_name, last_name, secret_code, type_role) VALUES (@id, @first_name, @last_name, @secret_code, @type_role);";
@@ -195,7 +195,7 @@ namespace Malshinon
             MySqlCommand cmd = null;
             try
             {
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
 
                 cmd = new MySqlCommand($"UPDATE people SET num_mentions = num_mentions + 1 WHERE id = @id;", _connection);
                 cmd.Parameters.AddWithValue("@id", id);
@@ -224,7 +224,8 @@ namespace Malshinon
             {
                 int idPeople = PeopleDal.GetIdByName(fullName);
 
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
+
                 cmd = new MySqlCommand($"SELECT AVG(LENGTH(text)) AS avg_length FROM `intel_reports` WHERE reporter_id = @idPeople GROUP BY reporter_id HAVING COUNT(*) >= 10;", _connection);
                 cmd.Parameters.AddWithValue("idPeople", idPeople);
                 reader = cmd.ExecuteReader();
@@ -258,7 +259,8 @@ namespace Malshinon
             try
             {
                 int idPeople = PeopleDal.GetIdByName(fullName);
-                dal.OpenConnection();
+                _connection = dal.OpenConnection();
+
                 cmd = new MySqlCommand($"SELECT *, COUNT(`target_id`) AS count_target_id FROM intel_reports GROUP BY `target_id` HAVING (count_target_id > 20 OR COUNT(`timestamp` >= NOW() - INTERVAL 15 MINUTE AND `timestamp` <= NOW()) > 3) AND target_id = @idPeople;", _connection);
                 cmd.Parameters.AddWithValue("idPeople", idPeople);
                 reader = cmd.ExecuteReader();
