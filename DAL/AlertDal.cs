@@ -9,7 +9,6 @@ namespace Malshinon
 {
     internal class AlertDal
     {
-        private string connectionString = "server=localhost;user=root;password=;database=malshinon";
         private MySqlConnection _connection;
         DAL dal = new DAL();
 
