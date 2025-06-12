@@ -18,7 +18,7 @@ namespace Malshinon
 
         public void CreateReportPerson(string fullName)
         {
-            Console.WriteLine("Enter text to report:");
+            Console.WriteLine("Enter text to report:\nOnly the first and last name should begin with a capital letter. For example: \"I saw Muhammad Sinwar and Hassan Nasrallah planning an attack\"");
             string textReport = Console.ReadLine();
             List<string> names = GetPersonListFromReport(textReport);
 
@@ -31,6 +31,7 @@ namespace Malshinon
             int reporterId = peopleDal.GetIdByName(fullName);
             foreach (string name in names)
             {
+                Console.WriteLine($"!!!!!\nname: {name}\n!!!!!");
                 peopleDal.PersonIdentificationFlow(name);
                 int targetId = peopleDal.GetIdByName(name);
                 reportDal.ReportIdentificationFlow(reporterId, targetId, textReport);
@@ -68,7 +69,7 @@ namespace Malshinon
                     {
                         full_name.Trim();
                         string[] countWords = full_name.Split(' ');
-                        if (countWords.Length > 1)
+                        if (countWords.Length > 2)
                         {
                             namesFromReports.Add(full_name);
                         }
@@ -77,10 +78,7 @@ namespace Malshinon
                     isName = false;
                 }
                 string[] countWords2 = full_name.Split(' ');
-                //Console.WriteLine("countWords2.Length:" + countWords2.Length);
-                //full_name.Trim();
-                Console.WriteLine("full name2: " + full_name);
-                if (i == textArr.Length - 1 && countWords2.Length > 1)
+                if (i == textArr.Length - 1 && countWords2.Length > 2)
                 {
                     namesFromReports.Add(full_name);
                 }

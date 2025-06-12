@@ -25,7 +25,10 @@ namespace Malshinon
                 Console.WriteLine("Enter invalid name!");
                 return;
             }
-
+            foreach (var name in FirstNameAndLast(full_name))
+            {
+                Console.WriteLine($"------ name: {name}");
+            }
             First_name = FirstNameAndLast(full_name)[0];
             Last_name = FirstNameAndLast(full_name)[1];
             Full_name = First_name + " " + Last_name;
@@ -63,14 +66,14 @@ namespace Malshinon
 
         static public string[] FirstNameAndLast(string fullName)
         {
+            //string[] parts = fullName.Split(' ');
+            //string first_name = string.Join(" ", parts.Take(parts.Length - 1));
+            //string last_name = parts[parts.Length - 1];
+            //string[] splitNames = { first_name, last_name };
+            //return splitNames;
+            //Console.WriteLine($"fullName: {fullName}, people.First_name: {first_name}, people.Last_name: {last_name}, splitNames[0]: {splitNames[0]}, splitNams[1]: {splitNames[1]}, names[0]: {names[0]}, names[1]: {names[1]}");
             string[] names = { };
             names = fullName.Split();
-            //string first_name = "";
-            //first_name = string.Join(" ", names.Take(names.Length - 1));
-            //string last_name = "";
-            //last_name = names[names.Length - 1];
-            //string[] splitNames = { first_name, last_name };
-            //Console.WriteLine($"fullName: {fullName}, people.First_name: {first_name}, people.Last_name: {last_name}, splitNames[0]: {splitNames[0]}, splitNams[1]: {splitNames[1]}, names[0]: {names[0]}, names[1]: {names[1]}");
             return names;
         }
 
