@@ -17,7 +17,6 @@ namespace Malshinon
             DAL dal = new DAL();
             while (stop)
             {
-                //Console.Clear();
                 Console.WriteLine("\nEnter your full name or secret code");
                 string checkIfSecret = Console.ReadLine();
                 bool ifSecret = int.TryParse(checkIfSecret, out int secretCode);
@@ -36,10 +35,10 @@ namespace Malshinon
                     fullName = checkIfSecret;
                     peopleDal.PersonIdentificationFlow(fullName);
                 }
-                //Console.Clear();
+                Console.Clear();
                 Console.WriteLine("\n#########\nWelcome\n#########\n");
                 await Task.Delay(1000);
-                //Console.Clear();
+                Console.Clear();
                 Console.WriteLine("Choose by number!\nmenu:\n1. Report\n2. get secret code");
                 bool isNumber = int.TryParse(Console.ReadLine(), out int chooseNumber);
                 if (!isNumber)

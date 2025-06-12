@@ -10,7 +10,6 @@ namespace Malshinon
 {
     internal class PeopleDal
     {
-        //private string connectionString = "server=localhost;user=root;password=;database=malshinon";
         private MySqlConnection _connection;
         DAL dal = new DAL();
 

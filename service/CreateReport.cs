@@ -14,7 +14,7 @@ namespace Malshinon
         DAL dal = new DAL();
         PeopleDal peopleDal = new PeopleDal();
         ReportDal reportDal = new ReportDal();
-
+        AlertDal alertDal = new AlertDal();
         public void CreateReportPerson(string fullName)
         {
             Console.WriteLine("Enter text to report:");
@@ -39,7 +39,8 @@ namespace Malshinon
                 reportDal.ChangeTypeRole(reporterId, typeRoleReporter);
                 string typeRoleMention = CheckStatusTypeRole(name);
                 reportDal.ChangeTypeRole(targetId, typeRoleMention);
-
+                Alert alert = new Alert(targetId, textReport);
+                alertDal.InsertAlert(alert);
             }
 
             Console.WriteLine("The report was successfully received.");
