@@ -76,7 +76,7 @@ namespace Malshinon
                     namesFromReports.Add(full_name);
                 }
             }
-
+            namesFromReports = namesFromReports.Distinct().ToList();
             return namesFromReports;
         }
 
@@ -90,7 +90,7 @@ namespace Malshinon
             {
                 Console.WriteLine($"****\nALERT: {fullName} is potential threat alert\n****");
             }
-            if (countAlert > 3)
+            if (countAlert >= 3)
             {
                 Console.WriteLine($"****\nALERT: {fullName} is a high-risk target.\n****");
             }

@@ -23,3 +23,14 @@ CREATE TABLE IF NOT EXISTS Intel_Reports
     FOREIGN KEY (target_id) REFERENCES people(id)
 );
 -- INSERT INTO Intel_Reports (id, reporter_id, target_id, text, timestamp) VALUES (0,2,3,'dsjhd dflsdfhds fkdsv','0');
+
+CREATE TABLE IF NOT EXISTS alerts
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    target_id INT NOT NULL,
+    text VARCHAR(200),
+    timestamp DATETIME DEFAULT NOW(),
+    FOREIGN KEY (reporter_id) REFERENCES people(id),
+    FOREIGN KEY (target_id) REFERENCES people(id)
+    id, target_id, created_at, reason
+);
